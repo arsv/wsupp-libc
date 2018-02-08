@@ -1,0 +1,61 @@
+#!/bin/sh
+
+unset arch cross target cc ar strip tp lto
+
+bindir=/usr/bin
+sbindir=/usr/sbin
+man1dir=/usr/share/man/man1
+man8dir=/usr/share/man/man8
+
+cflags=-Os
+ldflags=
+
+die() { echo "$@" >&2; exit 1; }
+
+while [ $# -gt 0 ]; do
+	case "$1" in
+		*dir=*) eval "$1" ;;
+		cross=*) eval "$1"; cross="${cross}-" ;;
+		target=*) eval "$1"; cross="${cross:-$target-}" ;;
+		cc=*) eval "$1" ;;
+		ar=*) eval "$1" ;;
+		cflags=*) eval "$1" ;;
+		ldflags=*) eval "$1" ;;
+		strip=*) eval "$1" ;;
+		clang) clang=yes ;;
+		devel) cflags="-Wall -g" ;;
+		debug) cflags="-Os -g" ;;
+		wextra) cflags="$cflags -Wextra" ;;
+		werror) cflags="$cflags -Werror" ;;
+		static) ldflags="$ldflags -static" ;;
+		lto) lto="-flto " ;;
+		only) shift; only="$@"; break ;;
+		*) die "Unexpected argument $1" ;;
+	esac; shift
+done
+
+test -z "$ar" && ar="${cross}ar"
+test -z "$strip" && strip="${cross}strip"
+
+if [ -n "$clang" -a -z "$cc" ]; then
+	cc="clang${target:+ --target=$target}"
+elif [ -z "$cc" ]; then
+	cc="${cross}gcc"
+fi
+
+cat > config.mk <<END
+CC = $cc
+AR = $ar
+LD = \$(CC)
+AS = \$(CC)
+STRIP = $strip
+
+CFLAGS = $cflags
+LDFLAGS = $ldflags
+LIBS =
+
+bindir = $bindir
+sbindir = $sbindir
+man1dir = $man1dir
+man8dir = $man8dir
+END

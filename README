@@ -1,0 +1,44 @@
+This is a standalone version of wsupp, the WPA supplicant from minibase,
+ported to standard libc and with minibase-specific parts removed.
+
+
+                       !! DO NOT USE THIS VERSION !!
+
+                 unless you are absolutely positively sure
+                 libc dependency is beneficial in your case
+                            (hint: it is not)
+
+                See https://github.com/arsv/minibase instead.
+
+
+Once connection is established, this version attempts to spawn `dhcp $iface`
+which is expected to configure the interface. The command should preferably
+be short-running, but wsupp can tolerate long-running ones as well.
+
+This version uses the same client protocol and the same file formats
+as the original one from minibase. However, `wifi` here lack commands
+to start or stop the service, because those require `ifmon` to work.
+
+
+How to build:
+
+    ./configure [cc=musl-gcc static]
+    make
+    make DESTDIR=... install
+
+How to use:
+
+    wsupp wlan0
+
+    wifi
+    wifi scan
+    wifi connect Blackhole
+    wifi disconnect
+
+
+The port is somewhat dirty right now, in that it retains code that makes
+sense within minibase but not so much in libc environment. Maybe I will
+fix that at some point.
+
+If you are looking for a simple WPA supplicant to study,
+check `wpa` from https://github.com/arsv/minibase/temp/wifi

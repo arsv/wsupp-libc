@@ -1,0 +1,12 @@
+*.o
+*.d
+*.a
+tags
+config.mk
+
+run
+var
+out
+
+wifi
+wsupp
