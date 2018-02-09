@@ -218,7 +218,7 @@ static void xshutdown(void)
 		opermode = OP_EXITREQ;
 }
 
-int main(int argc, char** argv, char** envp)
+int main(int argc, char** argv)
 {
 	int i = 1, ret;
 	char* name;

@@ -15,7 +15,7 @@ struct top {
 	int showbss;
 };
 
-#define CTX struct top* ctx
+#define CTX struct top* ctx __attribute__((unused))
 #define MSG struct ucmsg* msg
 #define AT struct ucattr* at
 #define UC (&ctx->uc)
