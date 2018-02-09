@@ -82,7 +82,8 @@ static int match_rfkill(int idx)
 	int plen = 100;
 	char path[plen];
 
-	snprintf(path, plen, "/sys/class/net/%s/phy80211/rfkill", ifname);
+	snprintf(path, plen, "/sys/class/net/%s/phy80211/rfkill%i",
+			ifname, idx);
 
 	return (stat(path, &st) >= 0);
 }
