@@ -1,6 +1,6 @@
 #include "../common.h"
 
-int nonzero(void* a, unsigned long n)
+int nonzero(void* a, size_t n)
 {
 	char* p = a;
 	char* e = a + n;
